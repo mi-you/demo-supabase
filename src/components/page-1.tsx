@@ -1,4 +1,8 @@
-import type { PostgrestSingleResponse } from "@supabase/supabase-js";
+import {
+  REALTIME_LISTEN_TYPES,
+  REALTIME_POSTGRES_CHANGES_LISTEN_EVENT,
+  type PostgrestSingleResponse,
+} from "@supabase/supabase-js";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import type { Database } from "../supabase/database.types";
 import { supabaseClient } from "../supabase/supabase-client";
@@ -22,6 +26,24 @@ export default function Page1() {
 
   useEffect(() => {
     getPosts();
+  }, [getPosts]);
+
+  useEffect(() => {
+    const channelA = supabaseClient
+      .channel("posts-db-changes")
+      .on(
+        REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
+        {
+          event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL,
+          schema: "public",
+          table: "posts",
+        },
+        () => getPosts()
+      )
+      .subscribe();
+    return () => {
+      channelA.unsubscribe();
+    };
   }, [getPosts]);
 
   const afterOp = useCallback(
