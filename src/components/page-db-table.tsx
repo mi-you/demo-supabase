@@ -7,7 +7,7 @@ import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import type { Database } from "../supabase/database.types";
 import { supabaseClient } from "../supabase/supabase-client";
 
-export default function Page1() {
+export default function PageDBTable() {
   const codeRef = useRef<HTMLPreElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLInputElement>(null);
@@ -94,7 +94,6 @@ export default function Page1() {
   );
   return (
     <div>
-      <h1>Page 1</h1>
       <h3>操作数据</h3>
       <input type="text" placeholder="title" ref={titleRef} />
       <input type="text" placeholder="content" ref={contentRef} />
